@@ -42,10 +42,9 @@ dotnet pack Trimmer/Trimmer.csproj -c Release
 dotnet tool install --global --add-source ./Trimmer/bin/Release Trimmer
 ```
 
-Once installed, the `trimmer` command is available on your `PATH`. Update or remove it with:
+Once installed, the `trimmer` command is available on your `PATH`. Remove it with:
 
 ```sh
-dotnet tool update --global Trimmer
 dotnet tool uninstall --global Trimmer
 ```
 
