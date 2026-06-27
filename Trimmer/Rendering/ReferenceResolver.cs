@@ -17,7 +17,7 @@ public static class ReferenceResolver
     {
         var byName = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        var trusted = (AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES") as string) ?? string.Empty;
+        var trusted = AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES") as string ?? string.Empty;
         foreach (var path in trusted.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
         {
             if (path.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))

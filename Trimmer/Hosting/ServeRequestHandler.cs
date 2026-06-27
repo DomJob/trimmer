@@ -49,6 +49,7 @@ public sealed class ServeRequestHandler
                     await ResponseWriter.WriteForbiddenAsync(context);
                     break;
 
+                case RouteKind.NotFound:
                 default:
                     await ResponseWriter.WriteNotFoundAsync(context);
                     break;

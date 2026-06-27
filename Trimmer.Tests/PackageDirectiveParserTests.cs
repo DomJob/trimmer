@@ -62,7 +62,7 @@ public class PackageDirectiveParserTests
         [
             "#:package A@1.0.0",
             "#:package B@2.0.0",
-            "#:package A@3.0.0",
+            "#:package A@3.0.0"
         ]);
 
         Assert.That(packages, Has.Count.EqualTo(2));

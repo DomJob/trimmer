@@ -10,7 +10,7 @@ public sealed record ProjectSources(
 /// <summary>Discovers the files that make up a Trimmer project on disk.</summary>
 public static class ProjectScanner
 {
-    private static readonly string[] IgnoredDirectories = ["bin", "obj", ".git", ".trimmer"];
+    private static readonly string[] IGNORED_DIRECTORIES = ["bin", "obj", ".git", ".trimmer"];
 
     public static IEnumerable<string> EnumerateCSharpFiles(string root) =>
         EnumerateFiles(root, ".cs");
@@ -52,7 +52,7 @@ public static class ProjectScanner
         {
             var relative = Path.GetRelativePath(root, file);
             var segments = relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            if (segments.Any(s => IgnoredDirectories.Contains(s, StringComparer.OrdinalIgnoreCase)))
+            if (segments.Any(s => IGNORED_DIRECTORIES.Contains(s, StringComparer.OrdinalIgnoreCase)))
             {
                 continue;
             }

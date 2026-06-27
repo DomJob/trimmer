@@ -54,22 +54,16 @@ public static class CliParser
 
     private static CliCommand ParseServe(string[] args)
     {
-        if (!TryReadCommon(args, out var path, out var port, out _, out var error, allowOutput: false))
-        {
-            return CliCommand.Fail(error!);
-        }
-
-        return new CliCommand { Kind = CommandKind.Serve, Path = path ?? ".", Port = port };
+        return TryReadCommon(args, out var path, out var port, out _, out var error, allowOutput: false)
+            ? new CliCommand { Kind = CommandKind.Serve, Path = path ?? ".", Port = port }
+            : CliCommand.Fail(error!);
     }
 
     private static CliCommand ParseBuild(string[] args)
     {
-        if (!TryReadCommon(args, out var path, out var port, out var output, out var error, allowOutput: true))
-        {
-            return CliCommand.Fail(error!);
-        }
-
-        return new CliCommand { Kind = CommandKind.Build, Path = path ?? ".", Port = port, Output = output };
+        return TryReadCommon(args, out var path, out var port, out var output, out var error, allowOutput: true)
+            ? new CliCommand { Kind = CommandKind.Build, Path = path ?? ".", Port = port, Output = output }
+            : CliCommand.Fail(error!);
     }
 
     private static CliCommand ParseRun(string[] args)

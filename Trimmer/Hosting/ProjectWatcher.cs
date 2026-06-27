@@ -22,7 +22,7 @@ public sealed class ProjectWatcher : IDisposable
             NotifyFilter = NotifyFilters.LastWrite
                 | NotifyFilters.FileName
                 | NotifyFilters.DirectoryName
-                | NotifyFilters.Size,
+                | NotifyFilters.Size
         };
 
         _watcher.Changed += OnEvent;

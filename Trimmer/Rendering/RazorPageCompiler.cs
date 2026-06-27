@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Trimmer.Rendering;
 
 /// <summary>A compiled page ready to be instantiated and rendered.</summary>
@@ -24,7 +22,7 @@ public sealed class CompiledPage(Type pageType)
 /// </summary>
 public static class RazorPageCompiler
 {
-    private static int _counter;
+    private static int counter;
 
     /// <summary>Compiles a single page together with the project's shared <c>.cs</c> sources.</summary>
     /// <param name="cshtml">Razor markup with <c>#:package</c> directives already removed.</param>
@@ -35,7 +33,7 @@ public static class RazorPageCompiler
         IEnumerable<string>? csharpSources = null,
         IEnumerable<string>? extraAssemblies = null)
     {
-        var className = "Page_" + Interlocked.Increment(ref _counter).ToString("D");
+        var className = "Page_" + Interlocked.Increment(ref counter).ToString("D");
         var generated = RazorSourceGenerator.Generate(cshtml, className);
 
         var sources = new List<string> { generated };
@@ -52,7 +50,7 @@ public static class RazorPageCompiler
 
         var references = ReferenceResolver.Resolve(resolved);
         var assemblyName = "TrimmerPages_" + Guid.NewGuid().ToString("N");
-        Assembly assembly = RoslynCompiler.CompileToAssembly(assemblyName, sources, references);
+        var assembly = RoslynCompiler.CompileToAssembly(assemblyName, sources, references);
 
         var pageType = assembly.GetType($"{RazorSourceGenerator.GeneratedNamespace}.{className}", throwOnError: true)!;
         return new CompiledPage(pageType);

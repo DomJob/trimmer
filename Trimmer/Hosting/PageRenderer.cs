@@ -18,7 +18,7 @@ public static class PageRenderer
 /// <summary>Low-level helpers for writing HTTP responses.</summary>
 public static class ResponseWriter
 {
-    private static readonly FileExtensionContentTypeProvider ContentTypes = new();
+    private static readonly FileExtensionContentTypeProvider CONTENT_TYPES = new();
 
     public static async Task WriteHtmlAsync(HttpContext context, string html)
     {
@@ -28,7 +28,7 @@ public static class ResponseWriter
 
     public static async Task WriteStaticAsync(HttpContext context, string path)
     {
-        context.Response.ContentType = ContentTypes.TryGetContentType(path, out var contentType)
+        context.Response.ContentType = CONTENT_TYPES.TryGetContentType(path, out var contentType)
             ? contentType
             : "application/octet-stream";
 

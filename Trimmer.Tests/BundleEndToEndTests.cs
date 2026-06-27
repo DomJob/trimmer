@@ -18,21 +18,21 @@ public class BundleEndToEndTests
     {
         _projectDir = Directory.CreateTempSubdirectory("trimmer_e2e_").FullName;
 
-        File.WriteAllText(Path.Combine(_projectDir, "shared.cs"),
+        await File.WriteAllTextAsync(Path.Combine(_projectDir, "shared.cs"),
             "namespace App; public static class Greeter { public static string Hello(string n) => $\"Hello, {n}!\"; }");
 
-        File.WriteAllText(Path.Combine(_projectDir, "index.cshtml"),
+        await File.WriteAllTextAsync(Path.Combine(_projectDir, "index.cshtml"),
             """
             @using App
             @code { string Name => "World"; }
             <html><body><h1>@Greeter.Hello(Name)</h1></body></html>
             """);
 
-        File.WriteAllText(Path.Combine(_projectDir, "about.cshtml"),
+        await File.WriteAllTextAsync(Path.Combine(_projectDir, "about.cshtml"),
             "<html><body><p>@(40 + 2)</p></body></html>");
 
         Directory.CreateDirectory(Path.Combine(_projectDir, "assets"));
-        File.WriteAllText(Path.Combine(_projectDir, "assets", "data.txt"), "static-asset-body");
+        await File.WriteAllTextAsync(Path.Combine(_projectDir, "assets", "data.txt"), "static-asset-body");
 
         var builder = new ProjectBuilder(new FakePackageResolver());
         _bundlePath = await builder.BuildAsync(_projectDir, Path.Combine(_projectDir, "app.trm"));
@@ -43,8 +43,13 @@ public class BundleEndToEndTests
 
     private static async Task<(int Status, string Body)> RequestAsync(BundleRequestHandler handler, string path)
     {
-        var context = new DefaultHttpContext();
-        context.Request.Path = path;
+        var context = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = path
+            }
+        };
         var body = new MemoryStream();
         context.Features.Set<IHttpResponseBodyFeature>(new StreamResponseBodyFeature(body));
 

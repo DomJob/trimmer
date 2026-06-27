@@ -5,7 +5,7 @@ public enum RouteKind
     NotFound,
     Forbidden,
     Razor,
-    Static,
+    Static
 }
 
 public readonly record struct RouteResult(RouteKind Kind, string? PhysicalPath)
@@ -35,7 +35,7 @@ public sealed class FileRouter
 
     public RouteResult Resolve(string requestPath)
     {
-        var relative = (requestPath ?? string.Empty).Replace('\\', '/').TrimStart('/');
+        var relative = requestPath.Replace('\\', '/').TrimStart('/');
 
         if (relative.Length == 0)
         {
@@ -66,19 +66,17 @@ public sealed class FileRouter
         }
 
         // Extensionless route -> <name>.cshtml
-        if (!Path.HasExtension(candidate))
+        if (Path.HasExtension(candidate)) return RouteResult.NotFound;
+        var asRazor = candidate + ".cshtml";
+        if (File.Exists(asRazor))
         {
-            var asRazor = candidate + ".cshtml";
-            if (File.Exists(asRazor))
-            {
-                return RouteResult.Razor(asRazor);
-            }
+            return RouteResult.Razor(asRazor);
+        }
 
-            var dirDefault = Path.Combine(candidate, DefaultDocument);
-            if (File.Exists(dirDefault))
-            {
-                return RouteResult.Razor(dirDefault);
-            }
+        var dirDefault = Path.Combine(candidate, DefaultDocument);
+        if (File.Exists(dirDefault))
+        {
+            return RouteResult.Razor(dirDefault);
         }
 
         return RouteResult.NotFound;

@@ -10,10 +10,10 @@ namespace Trimmer.Rendering;
 /// </summary>
 public static class RuntimeAssemblyResolver
 {
-    private static readonly ConcurrentDictionary<string, string> AssembliesByName =
+    private static readonly ConcurrentDictionary<string, string> ASSEMBLIES_BY_NAME =
         new(StringComparer.OrdinalIgnoreCase);
 
-    private static int _installed;
+    private static int installed;
 
     /// <summary>Registers assembly paths so they can be resolved on demand at runtime.</summary>
     public static void Register(IEnumerable<string> assemblyPaths)
@@ -22,7 +22,7 @@ public static class RuntimeAssemblyResolver
         {
             if (File.Exists(path) && path.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
             {
-                AssembliesByName[Path.GetFileNameWithoutExtension(path)] = path;
+                ASSEMBLIES_BY_NAME[Path.GetFileNameWithoutExtension(path)] = path;
             }
         }
 
@@ -31,7 +31,7 @@ public static class RuntimeAssemblyResolver
 
     private static void Install()
     {
-        if (Interlocked.Exchange(ref _installed, 1) == 1)
+        if (Interlocked.Exchange(ref installed, 1) == 1)
         {
             return;
         }
@@ -39,7 +39,7 @@ public static class RuntimeAssemblyResolver
         AssemblyLoadContext.Default.Resolving += (context, name) =>
         {
             if (name.Name is not null
-                && AssembliesByName.TryGetValue(name.Name, out var path)
+                && ASSEMBLIES_BY_NAME.TryGetValue(name.Name, out var path)
                 && File.Exists(path))
             {
                 return context.LoadFromAssemblyPath(path);

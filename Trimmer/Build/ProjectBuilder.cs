@@ -77,7 +77,7 @@ public sealed class ProjectBuilder(IPackageResolver packageResolver)
                 File.Delete(outputPath);
             }
 
-            ZipFile.CreateFromDirectory(staging.FullName, outputPath, CompressionLevel.SmallestSize, includeBaseDirectory: false);
+            await ZipFile.CreateFromDirectoryAsync(staging.FullName, outputPath, CompressionLevel.SmallestSize, includeBaseDirectory: false, cancellationToken: cancellationToken);
         }
         finally
         {

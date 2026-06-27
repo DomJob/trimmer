@@ -9,23 +9,23 @@ public sealed class BundleManifest
     public const string FileName = "manifest.json";
 
     /// <summary>The compiled pages assembly file name (e.g. <c>pages.dll</c>).</summary>
-    public string Assembly { get; set; } = "pages.dll";
+    public string Assembly { get; init; } = "pages.dll";
 
     /// <summary>Maps a normalized request route to the generated page type's full name.</summary>
-    public Dictionary<string, string> Routes { get; set; } = new();
+    public Dictionary<string, string> Routes { get; init; } = new();
 
     /// <summary>NuGet assembly file names placed under <c>lib/</c>.</summary>
-    public List<string> Libraries { get; set; } = [];
+    public List<string> Libraries { get; init; } = [];
 
-    private static readonly JsonSerializerOptions Options = new()
+    private static readonly JsonSerializerOptions OPTIONS = new()
     {
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
-    public string ToJson() => JsonSerializer.Serialize(this, Options);
+    public string ToJson() => JsonSerializer.Serialize(this, OPTIONS);
 
     public static BundleManifest FromJson(string json) =>
-        JsonSerializer.Deserialize<BundleManifest>(json, Options)
+        JsonSerializer.Deserialize<BundleManifest>(json, OPTIONS)
         ?? throw new InvalidOperationException("Invalid bundle manifest.");
 }

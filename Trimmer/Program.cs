@@ -49,6 +49,7 @@ try
         }
 
         default:
+        case CommandKind.Help:
             HelpText.Print(Console.Out);
             break;
     }

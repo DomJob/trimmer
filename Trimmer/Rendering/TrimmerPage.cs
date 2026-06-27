@@ -92,18 +92,24 @@ public abstract class TrimmerPage
         bool isLiteral)
     {
         _output.Append(prefix);
-        if (value is RawString raw)
+        switch (value)
         {
-            _output.Append(raw.Value);
-        }
-        else if (value is bool b)
-        {
-            _output.Append(b ? "true" : "false");
-        }
-        else if (value is not null)
-        {
-            var text = value.ToString();
-            _output.Append(isLiteral ? text : WebUtility.HtmlEncode(text));
+            case RawString raw:
+                _output.Append(raw.Value);
+                break;
+            case bool b:
+                _output.Append(b ? "true" : "false");
+                break;
+            default:
+            {
+                if (value is not null)
+                {
+                    var text = value.ToString();
+                    _output.Append(isLiteral ? text : WebUtility.HtmlEncode(text));
+                }
+
+                break;
+            }
         }
     }
 

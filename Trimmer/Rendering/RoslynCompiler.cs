@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
 
 namespace Trimmer.Rendering;
 
@@ -52,7 +51,7 @@ public static class RoslynCompiler
                 nullableContextOptions: NullableContextOptions.Annotations));
 
         var stream = new MemoryStream();
-        EmitResult result = compilation.Emit(stream);
+        var result = compilation.Emit(stream);
         if (!result.Success)
         {
             var errors = result.Diagnostics

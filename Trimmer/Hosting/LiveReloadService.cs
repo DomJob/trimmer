@@ -11,16 +11,16 @@ public sealed class LiveReloadService
 
     private volatile TaskCompletionSource _signal = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-    public string ClientScript { get; } =
+    public string ClientScript =>
         $$"""
-        <script>
-        (function () {
-            if (!window.EventSource) { return; }
-            var source = new EventSource('{{Endpoint}}');
-            source.onmessage = function () { window.location.reload(); };
-        })();
-        </script>
-        """;
+          <script>
+          (function () {
+              if (!window.EventSource) { return; }
+              var source = new EventSource('{{Endpoint}}');
+              source.onmessage = function () { window.location.reload(); };
+          })();
+          </script>
+          """;
 
     /// <summary>Resolves the next time the project changes.</summary>
     public Task WaitForChangeAsync(CancellationToken cancellationToken) =>

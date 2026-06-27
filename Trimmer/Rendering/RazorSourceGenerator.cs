@@ -12,7 +12,7 @@ public static class RazorSourceGenerator
 {
     public const string GeneratedNamespace = "TrimmerGenerated";
 
-    private static readonly Regex CodeBlock = new(@"@code(?=\s*\{)");
+    private static readonly Regex CODE_BLOCK = new(@"@code(?=\s*\{)");
 
     /// <summary>Generates C# source for a single page.</summary>
     /// <param name="cshtml">The (already package-stripped) Razor markup.</param>
@@ -23,7 +23,7 @@ public static class RazorSourceGenerator
         ArgumentException.ThrowIfNullOrEmpty(className);
 
         // Razor uses @functions for class-level members; treat Blazor-style @code the same way.
-        var markup = CodeBlock.Replace(cshtml, "@functions");
+        var markup = CODE_BLOCK.Replace(cshtml, "@functions");
 
         var fileSystem = RazorProjectFileSystem.Create(Directory.GetCurrentDirectory());
         var engine = RazorProjectEngine.Create(RazorConfiguration.Default, fileSystem, builder =>
@@ -34,7 +34,7 @@ public static class RazorSourceGenerator
             FunctionsDirective.Register(builder);
             InheritsDirective.Register(builder);
 
-            builder.ConfigureClass((document, node) =>
+            builder.ConfigureClass((_, node) =>
             {
                 node.ClassName = className;
                 node.Modifiers.Clear();
