@@ -1,0 +1,29 @@
+#:package Humanizer@2.14.1
+@using Humanizer
+@using System
+@code {
+    string BuildTimeNote => "No .csproj, no .sln, no appsettings.json - just files.";
+}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>About</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <h1>About</h1>
+    @{
+      var dotNet9Released = DateTimeOffset.Parse("2026-06-27");
+      var since = DateTimeOffset.Now - dotNet9Released;
+      string message = $"It has been {since.Humanize()} since Trimmer was released!";
+    }
+    <p>Hello @message</p>
+    <p>@BoolToWords()</p>
+    <p>@BuildTimeNote</p>
+    <p><a href="/">Back home</a></p>
+    @functions {
+        string BoolToWords() => $"3 + 2 = {3 + 2}";
+    }
+  </body>
+</html>

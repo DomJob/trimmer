@@ -1,0 +1,26 @@
+@using Site
+@code {
+    string Title => "Hello from Trimmer";
+    string[] Frameworks => new[] { "PHP-like", "no csproj", "hot reload" };
+}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>@Title</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <h1>@Title</h1>
+    <p>This page was rendered by C# running on the server: <strong>@Greeter.Welcome()</strong></p>
+    <ul>
+    @foreach (var item in Frameworks)
+    {
+        <li>@item</li>
+    }
+    </ul>
+
+    <p><a href="/form">Send us your name</a></p>
+    <p><a href="/about">About this app</a></p>
+  </body>
+</html>

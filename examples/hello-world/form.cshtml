@@ -1,0 +1,43 @@
+@using Site
+@{
+    string? postedName = null;
+
+    if(Request.Method == "POST")
+    {
+        postedName = Request.Form["name"];
+        Greeter.AddName(postedName);
+    }
+}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Form</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+
+    @if(postedName != null)
+    {
+        <p>Hello, @postedName!</p>
+    } else {
+        <form action="/form" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" />
+        <button type="submit">Submit</button>
+        </form>
+    }
+
+    @if(Greeter.Names.Count > 0)
+    {
+        <p>Previously seen names:</p>
+        <ul>
+            @foreach (var name in Greeter.Names)
+            {
+                <li>@name</li>
+            }
+        </ul>
+    }
+    <p><a href="/">Back home</a></p>
+  </body>
+</html>

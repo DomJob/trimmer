@@ -1,0 +1,16 @@
+body {
+    font-family: system-ui, sans-serif;
+    max-width: 40rem;
+    margin: 3rem auto;
+    padding: 0 1rem;
+    line-height: 1.6;
+    color: #1b1b1f;
+}
+
+h1 {
+    color: #5b2a86;
+}
+
+a {
+    color: #5b2a86;
+}
