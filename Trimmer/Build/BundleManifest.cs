@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Trimmer.Build;
 
-/// <summary>Describes the contents of a compiled <c>.trmr</c> bundle.</summary>
+/// <summary>Describes the contents of a compiled <c>.trm</c> bundle.</summary>
 public sealed class BundleManifest
 {
     public const string FileName = "manifest.json";

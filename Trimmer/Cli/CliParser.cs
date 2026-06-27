@@ -81,7 +81,7 @@ public static class CliParser
 
         if (path is null)
         {
-            return CliCommand.Fail("'run' requires a bundle path, e.g. 'trimmer run app.trmr'.");
+            return CliCommand.Fail("'run' requires a bundle path, e.g. 'trimmer run app.trm'.");
         }
 
         return new CliCommand { Kind = CommandKind.Run, Path = path, Port = port };

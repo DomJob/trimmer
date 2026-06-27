@@ -5,7 +5,7 @@ using Trimmer.Rendering;
 namespace Trimmer.Build;
 
 /// <summary>
-/// Compiles an entire project into a single, compact <c>.trmr</c> bundle: one assembly
+/// Compiles an entire project into a single, compact <c>.trm</c> bundle: one assembly
 /// containing every page, a route manifest, the resolved NuGet assemblies and static assets.
 /// </summary>
 public sealed class ProjectBuilder(IPackageResolver packageResolver)
@@ -18,7 +18,7 @@ public sealed class ProjectBuilder(IPackageResolver packageResolver)
             throw new DirectoryNotFoundException($"Directory '{root}' does not exist.");
         }
 
-        outputPath = Path.GetFullPath(outputPath ?? new DirectoryInfo(root).Name + ".trmr");
+        outputPath = Path.GetFullPath(outputPath ?? new DirectoryInfo(root).Name + ".trm");
 
         var project = ProjectScanner.LoadCSharp(root);
         var sources = new List<string>(project.CSharpSources);

@@ -8,11 +8,13 @@ public sealed class ServeRequestHandler
 {
     private readonly FileRouter _router;
     private readonly LiveReloadService _liveReload;
+    private readonly CancellationToken _shutdownToken;
 
-    public ServeRequestHandler(string root, IPackageResolver resolver, LiveReloadService liveReload)
+    public ServeRequestHandler(string root, IPackageResolver resolver, LiveReloadService liveReload, CancellationToken shutdownToken = default)
     {
         _router = new FileRouter(root);
         _liveReload = liveReload;
+        _shutdownToken = shutdownToken;
         Compiler = new ProjectCompiler(root, resolver);
     }
 
@@ -24,7 +26,7 @@ public sealed class ServeRequestHandler
 
         if (path == LiveReloadService.Endpoint)
         {
-            await LiveReloadEndpoint.StreamAsync(context, _liveReload);
+            await LiveReloadEndpoint.StreamAsync(context, _liveReload, _shutdownToken);
             return;
         }
 

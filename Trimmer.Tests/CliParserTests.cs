@@ -30,10 +30,10 @@ public class CliParserTests
     [Test]
     public void Build_with_output()
     {
-        var command = CliParser.Parse(["build", "src", "-o", "out.trmr"]);
+        var command = CliParser.Parse(["build", "src", "-o", "out.trm"]);
         Assert.That(command.Kind, Is.EqualTo(CommandKind.Build));
         Assert.That(command.Path, Is.EqualTo("src"));
-        Assert.That(command.Output, Is.EqualTo("out.trmr"));
+        Assert.That(command.Output, Is.EqualTo("out.trm"));
     }
 
     [Test]
@@ -45,9 +45,9 @@ public class CliParserTests
     [Test]
     public void Run_with_bundle_and_port()
     {
-        var command = CliParser.Parse(["run", "app.trmr", "-p", "9000"]);
+        var command = CliParser.Parse(["run", "app.trm", "-p", "9000"]);
         Assert.That(command.Kind, Is.EqualTo(CommandKind.Run));
-        Assert.That(command.Path, Is.EqualTo("app.trmr"));
+        Assert.That(command.Path, Is.EqualTo("app.trm"));
         Assert.That(command.Port, Is.EqualTo(9000));
     }
 

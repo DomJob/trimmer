@@ -17,7 +17,6 @@ public static class TrimmerServer
         }
 
         var liveReload = new LiveReloadService();
-        var handler = new ServeRequestHandler(root, resolver, liveReload);
 
         var builder = WebApplication.CreateSlimBuilder();
         builder.Logging.ClearProviders();
@@ -26,6 +25,8 @@ public static class TrimmerServer
 
         var app = builder.Build();
         app.Urls.Add($"http://localhost:{port}");
+
+        var handler = new ServeRequestHandler(root, resolver, liveReload, app.Lifetime.ApplicationStopping);
 
         using var watcher = new ProjectWatcher(root, () =>
         {

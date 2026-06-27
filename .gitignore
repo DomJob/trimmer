@@ -482,6 +482,6 @@ $RECYCLE.BIN/
 *.swp
 
 # Trimmer
-*.trmr
+*.trm
 .trimmer/
 

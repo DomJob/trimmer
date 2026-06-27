@@ -5,7 +5,7 @@ using Trimmer.Rendering;
 namespace Trimmer.Build;
 
 /// <summary>
-/// A compiled <c>.trmr</c> bundle extracted and loaded into memory, ready to serve.
+/// A compiled <c>.trm</c> bundle extracted and loaded into memory, ready to serve.
 /// Routes map to compiled page types and static assets live in <see cref="AssetsDirectory"/>.
 /// </summary>
 public sealed class LoadedBundle : IDisposable

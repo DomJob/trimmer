@@ -35,7 +35,7 @@ public class BundleEndToEndTests
         File.WriteAllText(Path.Combine(_projectDir, "assets", "data.txt"), "static-asset-body");
 
         var builder = new ProjectBuilder(new FakePackageResolver());
-        _bundlePath = await builder.BuildAsync(_projectDir, Path.Combine(_projectDir, "app.trmr"));
+        _bundlePath = await builder.BuildAsync(_projectDir, Path.Combine(_projectDir, "app.trm"));
     }
 
     [OneTimeTearDown]
