@@ -8,12 +8,11 @@ namespace Trimmer.Rendering;
 /// Turns a <c>.cshtml</c> document into generated C# source using the Razor language engine.
 /// The generated class derives from <see cref="TrimmerPage"/>.
 /// </summary>
-public static partial class RazorSourceGenerator
+public static class RazorSourceGenerator
 {
     public const string GeneratedNamespace = "TrimmerGenerated";
 
-    [GeneratedRegex(@"@code(?=\s*\{)")]
-    private static partial Regex CodeBlock();
+    private static readonly Regex CodeBlock = new(@"@code(?=\s*\{)");
 
     /// <summary>Generates C# source for a single page.</summary>
     /// <param name="cshtml">The (already package-stripped) Razor markup.</param>
@@ -24,7 +23,7 @@ public static partial class RazorSourceGenerator
         ArgumentException.ThrowIfNullOrEmpty(className);
 
         // Razor uses @functions for class-level members; treat Blazor-style @code the same way.
-        var markup = CodeBlock().Replace(cshtml, "@functions");
+        var markup = CodeBlock.Replace(cshtml, "@functions");
 
         var fileSystem = RazorProjectFileSystem.Create(Directory.GetCurrentDirectory());
         var engine = RazorProjectEngine.Create(RazorConfiguration.Default, fileSystem, builder =>
