@@ -26,6 +26,7 @@ public readonly record struct RouteResult(RouteKind Kind, string? PhysicalPath)
 public sealed class FileRouter
 {
     private const string DefaultDocument = "index.cshtml";
+    private const string DefaultStaticDocument = "index.html";
     private readonly string _root;
 
     public FileRouter(string rootDirectory)
@@ -37,20 +38,18 @@ public sealed class FileRouter
     {
         var relative = requestPath.Replace('\\', '/').TrimStart('/');
 
-        if (relative.Length == 0)
-        {
-            relative = DefaultDocument;
-        }
-        else if (relative.EndsWith('/'))
-        {
-            relative += DefaultDocument;
-        }
+        var wantsDirectoryDefault = relative.Length == 0 || relative.EndsWith('/');
 
         // Resolve to an absolute path and guard against directory traversal.
         var candidate = Path.GetFullPath(Path.Combine(_root, relative));
         if (!IsUnderRoot(candidate))
         {
             return RouteResult.Forbidden;
+        }
+
+        if (wantsDirectoryDefault)
+        {
+            return ResolveDirectoryDefault(candidate);
         }
 
         if (HasExtension(candidate, ".cs"))
@@ -73,10 +72,25 @@ public sealed class FileRouter
             return RouteResult.Razor(asRazor);
         }
 
-        var dirDefault = Path.Combine(candidate, DefaultDocument);
-        if (File.Exists(dirDefault))
+        return ResolveDirectoryDefault(candidate);
+    }
+
+    /// <summary>
+    /// Resolves the default document for a directory, preferring
+    /// <c>index.cshtml</c> and falling back to <c>index.html</c>.
+    /// </summary>
+    private RouteResult ResolveDirectoryDefault(string directory)
+    {
+        var razor = Path.Combine(directory, DefaultDocument);
+        if (File.Exists(razor))
         {
-            return RouteResult.Razor(dirDefault);
+            return RouteResult.Razor(razor);
+        }
+
+        var html = Path.Combine(directory, DefaultStaticDocument);
+        if (File.Exists(html))
+        {
+            return RouteResult.Static(html);
         }
 
         return RouteResult.NotFound;
