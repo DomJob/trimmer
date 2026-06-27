@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Trimmer.Tests/Trimmer.Tests.csproj" />
+  <Project Path="Trimmer/Trimmer.csproj" />
+</Solution>

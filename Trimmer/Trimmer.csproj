@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Trimmer</RootNamespace>
+    <AssemblyName>trimmer</AssemblyName>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>trimmer</ToolCommandName>
+    <PackageId>Trimmer</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>DomJob</Authors>
+    <Description>A PHP-like developer experience for C#: serve raw .cshtml and .cs files as Razor pages, no project files required.</Description>
+    <PackageProjectUrl>https://github.com/DomJob/trimmer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DomJob/trimmer</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.36" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+  </ItemGroup>
+
+</Project>
