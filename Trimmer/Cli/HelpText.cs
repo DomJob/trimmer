@@ -7,8 +7,6 @@ public static class HelpText
     {
         writer.WriteLine(
             """
-            trimmer - a PHP-like developer experience for C#
-
             USAGE:
               trimmer serve [dir] [--port <n>]      Serve a project with hot reload (default port 5122).
               trimmer build [dir] [--output <file>] Compile a project into a compact .trm bundle.

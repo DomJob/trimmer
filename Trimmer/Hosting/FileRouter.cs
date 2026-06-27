@@ -65,7 +65,7 @@ public sealed class FileRouter
                 : RouteResult.Static(candidate);
         }
 
-        // Extensionless route -> <name>.cshtml (PHP-style clean URLs).
+        // Extensionless route -> <name>.cshtml
         if (!Path.HasExtension(candidate))
         {
             var asRazor = candidate + ".cshtml";

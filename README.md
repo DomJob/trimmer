@@ -1,12 +1,8 @@
 # Trimmer
 
-A PHP-like developer experience for C#. Drop `.cshtml` and `.cs` files in a folder and
-serve them as Razor pages. No `.csproj`, no `.sln`, no `appsettings.json` - just the files
-your app is actually made of.
+Drop `.cshtml` and `.cs` files in a folder and serve them directly as Razor pages with Trimmer. No `.csproj`, no `.sln`, no `appsettings.json` needed, just the files your app is actually made of.
 
-Trimmer is to Razor what `index.php` is to PHP: write a page, hit the URL, see the result.
-C# inside your pages runs on the server and returns HTML, exactly like PHP - except the
-language is C# and the code lives in `@code` blocks.
+Write a page, hit the URL, see the result. C# inside your pages runs on the server and returns HTML.
 
 ---
 
