@@ -33,12 +33,6 @@ language is C# and the code lives in `@code` blocks.
 
 Trimmer is a .NET global tool and requires the **.NET 10 SDK**.
 
-### From NuGet
-
-```sh
-dotnet tool install --global Trimmer
-```
-
 ### From source
 
 ```sh
@@ -185,7 +179,7 @@ first time you serve or build, and cached afterwards.
 
 ```
 trimmer serve [dir] [--port <n>]        Serve a project with hot reload (default port 5122).
-trimmer build [dir] [--output <file>]   Compile a project into a compact .trmr bundle.
+trimmer build [dir] [--output <file>]   Compile a project into a compact .trm bundle.
 trimmer run <bundle> [--port <n>]       Serve a pre-built bundle (default port 5122).
 trimmer help                            Show help.
 ```
@@ -201,21 +195,21 @@ trimmer serve ./www --port 8080
 ### build
 
 Compiles every page and `.cs` file into a single assembly, bundles it with the resolved
-NuGet assemblies and your static assets, and writes one `.trmr` file.
+NuGet assemblies and your static assets, and writes one `.trm` file.
 
 ```sh
-trimmer build ./www --output site.trmr
+trimmer build ./www --output site.trm
 ```
 
-The bundle defaults to `<foldername>.trmr` when `--output` is omitted.
+The bundle defaults to `<foldername>.trm` when `--output` is omitted.
 
 ### run
 
-Serves a `.trmr` bundle with all pages pre-compiled and no file watching - intended for
+Serves a `.trm` bundle with all pages pre-compiled and no file watching - intended for
 production.
 
 ```sh
-trimmer run site.trmr --port 5122
+trimmer run site.trm --port 5122
 ```
 
 ---
