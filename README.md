@@ -96,7 +96,7 @@ www/
     └── app.js          ->  /assets/app.js
 ```
 
-A complete example lives in [`examples/hello-world`](examples/hello-world).
+See the [`example`](example) folder for a toy implementation.
 
 ---
 
@@ -230,7 +230,6 @@ trimmer run site.trm --port 5122
 ```sh
 dotnet build              # build the tool and tests
 dotnet test               # run the unit test suite
-dotnet test --filter Category=Integration   # also restore a real NuGet package (needs network)
 ```
 
 The solution contains two projects:

@@ -16,6 +16,9 @@ public static class LiveReloadEndpoint
         context.Response.Headers.Connection = "keep-alive";
         context.Response.ContentType = "text/event-stream";
 
+        var pageKey = context.Request.Query[LiveReloadService.PageQueryKey].ToString();
+        using var connection = liveReload.Connect(pageKey);
+
         await context.Response.WriteAsync(": connected\n\n", token);
         await context.Response.Body.FlushAsync(token);
 
@@ -23,7 +26,7 @@ public static class LiveReloadEndpoint
         {
             try
             {
-                await liveReload.WaitForChangeAsync(token);
+                await connection.WaitForChangeAsync(token);
                 await context.Response.WriteAsync("data: reload\n\n", token);
                 await context.Response.Body.FlushAsync(token);
             }

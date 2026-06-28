@@ -27,15 +27,29 @@ public class LiveReloadServiceTests
     }
 
     [Test]
-    public async Task NotifyChange_releases_waiters()
+    public async Task NotifyChange_releases_matching_waiters()
     {
         var service = new LiveReloadService();
-        var wait = service.WaitForChangeAsync(CancellationToken.None);
+        using var connection = service.Connect("about.cshtml");
+        var wait = connection.WaitForChangeAsync(CancellationToken.None);
         Assert.That(wait.IsCompleted, Is.False);
 
-        service.NotifyChange();
+        service.NotifyChange(pageKey => pageKey == "about.cshtml");
         await wait.WaitAsync(TimeSpan.FromSeconds(2));
         Assert.That(wait.IsCompletedSuccessfully, Is.True);
+    }
+
+    [Test]
+    public async Task NotifyChange_ignores_unrelated_waiters()
+    {
+        var service = new LiveReloadService();
+        using var connection = service.Connect("about.cshtml");
+        var wait = connection.WaitForChangeAsync(CancellationToken.None);
+
+        service.NotifyChange(pageKey => pageKey == "form.cshtml");
+
+        await Task.Delay(100);
+        Assert.That(wait.IsCompleted, Is.False);
     }
 }
 

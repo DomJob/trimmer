@@ -28,10 +28,21 @@ public static class TrimmerServer
 
         var handler = new ServeRequestHandler(root, resolver, liveReload, app.Lifetime.ApplicationStopping);
 
-        using var watcher = new ProjectWatcher(root, () =>
+        using var watcher = new ProjectWatcher(root, changed =>
         {
             handler.Compiler.Invalidate();
-            liveReload.NotifyChange();
+
+            // A page only needs to reload when the change is relevant to it: the page's own
+            // .cshtml, or any .cs file (shared C# is compiled into every page). Changes to
+            // unrelated pages or static assets leave the current page untouched.
+            var sharedCodeChanged = changed.Any(IsCSharpSource);
+            var changedPages = changed
+                .Where(IsRazorPage)
+                .Select(p => PageKey(root, p))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            liveReload.NotifyChange(pageKey =>
+                sharedCodeChanged || changedPages.Contains(pageKey));
         });
         watcher.Start();
 
@@ -44,4 +55,16 @@ public static class TrimmerServer
         await app.StartAsync(cancellationToken);
         await app.WaitForShutdownAsync(cancellationToken);
     }
+
+    private static bool IsRazorPage(string path) =>
+        path.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsCSharpSource(string path) =>
+        path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>The page key shared between the browser and server: the page's path relative to the root.</summary>
+    internal static string PageKey(string root, string cshtmlPath) =>
+        Path.GetRelativePath(root, cshtmlPath).Replace('\\', '/');
 }
+
+

@@ -7,12 +7,13 @@ namespace Trimmer.Hosting;
 public sealed class ProjectWatcher : IDisposable
 {
     private readonly FileSystemWatcher _watcher;
-    private readonly Action _onChanged;
+    private readonly Action<IReadOnlyCollection<string>> _onChanged;
     private readonly TimeSpan _debounce;
     private readonly Lock _gate = new();
+    private readonly HashSet<string> _pending = new(StringComparer.OrdinalIgnoreCase);
     private Timer? _timer;
 
-    public ProjectWatcher(string root, Action onChanged, TimeSpan? debounce = null)
+    public ProjectWatcher(string root, Action<IReadOnlyCollection<string>> onChanged, TimeSpan? debounce = null)
     {
         _onChanged = onChanged;
         _debounce = debounce ?? TimeSpan.FromMilliseconds(150);
@@ -28,22 +29,46 @@ public sealed class ProjectWatcher : IDisposable
         _watcher.Changed += OnEvent;
         _watcher.Created += OnEvent;
         _watcher.Deleted += OnEvent;
-        _watcher.Renamed += OnEvent;
+        _watcher.Renamed += OnRenamed;
     }
 
     public void Start() => _watcher.EnableRaisingEvents = true;
 
-    private void OnEvent(object sender, FileSystemEventArgs e)
+    private void OnRenamed(object sender, RenamedEventArgs e)
     {
-        if (ShouldIgnore(e.FullPath))
+        Track(e.OldFullPath);
+        Track(e.FullPath);
+    }
+
+    private void OnEvent(object sender, FileSystemEventArgs e) => Track(e.FullPath);
+
+    private void Track(string fullPath)
+    {
+        if (ShouldIgnore(fullPath))
         {
             return;
         }
 
         lock (_gate)
         {
+            _pending.Add(fullPath);
             _timer?.Dispose();
-            _timer = new Timer(_ => _onChanged(), null, _debounce, Timeout.InfiniteTimeSpan);
+            _timer = new Timer(_ => Flush(), null, _debounce, Timeout.InfiniteTimeSpan);
+        }
+    }
+
+    private void Flush()
+    {
+        string[] changed;
+        lock (_gate)
+        {
+            changed = [.. _pending];
+            _pending.Clear();
+        }
+
+        if (changed.Length > 0)
+        {
+            _onChanged(changed);
         }
     }
 

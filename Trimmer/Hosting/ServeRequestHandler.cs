@@ -38,7 +38,8 @@ public sealed class ServeRequestHandler
                 case RouteKind.Razor:
                     var page = await Compiler.GetPageAsync(route.PhysicalPath!, context.RequestAborted);
                     var html = await PageRenderer.RenderAsync(page, context);
-                    await ResponseWriter.WriteHtmlAsync(context, _liveReload.InjectInto(html));
+                    var pageKey = TrimmerServer.PageKey(Compiler.Root, route.PhysicalPath!);
+                    await ResponseWriter.WriteHtmlAsync(context, _liveReload.InjectInto(html, pageKey));
                     break;
 
                 case RouteKind.Static:
